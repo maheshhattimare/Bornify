@@ -9,7 +9,7 @@ import authRoutes from "./routes/authRoutes.js";
 import birthdayRoutes from "./routes/birthdayRoutes.js";
 
 const PORT = process.env.PORT || 3000;
-const allowedOrigins = ["https://bornify.vercel.app", "http://localhost:5173"];
+const allowedOrigins = ["https://bornify.vercel.app"];
 
 const app = express();
 

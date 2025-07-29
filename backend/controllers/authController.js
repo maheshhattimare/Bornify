@@ -195,7 +195,7 @@ export const googleLogin = async (req, res) => {
       user = await UserModel.create({
         name: name,
         email,
-        dob: "01 January 1990",
+        dob: null,
         googleId: sub,
         isVerified: true,
         // Clear any existing OTP data
@@ -248,5 +248,69 @@ export const googleLogin = async (req, res) => {
       message: "Google login failed",
       error: process.env.NODE_ENV === "development" ? error.message : undefined,
     });
+  }
+};
+
+export const getMe = async (req, res) => {
+  try {
+    // Find user from token (req.user is set by protect middleware)
+    const user = await UserModel.findById(req.user.id).select("-password -__v");
+
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+
+    res.status(200).json({ success: true, user });
+  } catch (error) {
+    console.error("Error fetching profile:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+/**
+ * @desc Update logged-in user's Date of Birth
+ * @route PUT /auth/dob
+ * @access Private
+ */
+export const updateDob = async (req, res) => {
+  try {
+    const { dob } = req.body;
+
+    // Validate DOB
+    if (!dob) {
+      return res.status(400).json({ message: "Date of birth is required" });
+    }
+
+    const parsedDob = new Date(dob);
+    if (isNaN(parsedDob.getTime())) {
+      return res.status(400).json({ message: "Invalid date format" });
+    }
+
+    // Optional: Prevent future dates
+    const today = new Date();
+    if (parsedDob > today) {
+      return res.status(400).json({ message: "DOB cannot be in the future" });
+    }
+
+    // Update user DOB
+    const updatedUser = await UserModel.findByIdAndUpdate(
+      req.user.id, // from authMiddleware
+      { dob: parsedDob },
+      { new: true, select: "-password -googleId" } // hide sensitive fields
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    return res.json({
+      message: "Date of birth updated successfully",
+      user: updatedUser,
+    });
+  } catch (error) {
+    console.error("Error updating DOB:", error);
+    return res.status(500).json({ message: "Server error" });
   }
 };

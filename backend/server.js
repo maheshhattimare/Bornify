@@ -8,6 +8,9 @@ import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import birthdayRoutes from "./routes/birthdayRoutes.js";
 
+// Import cron job
+import "./jobs/cronJob.js";
+
 const PORT = process.env.PORT || 3000;
 const allowedOrigins = ["https://bornify.vercel.app"];
 

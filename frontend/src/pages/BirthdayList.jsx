@@ -217,14 +217,14 @@ function BirthdayList() {
     <>
       {/* Delete Confirmation Modal */}
       {showDeleteConfirm && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 max-w-md w-full shadow-2xl border-2 border-red-200/50 dark:border-red-700/30">
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
+          <div className="bg-white dark:bg-gray-900 rounded-xl p-6 max-w-md w-full shadow-xl border border-gray-200 dark:border-gray-700">
             <div className="flex items-center space-x-3 mb-4">
-              <div className="w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center">
-                <Trash2 className="w-6 h-6 text-red-600 dark:text-red-400" />
+              <div className="w-10 h-10 bg-red-50 dark:bg-red-900/20 rounded-lg flex items-center justify-center">
+                <Trash2 className="w-5 h-5 text-red-600 dark:text-red-400" />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-gray-900 dark:text-white">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                   Delete Birthday
                 </h3>
                 <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -242,14 +242,14 @@ function BirthdayList() {
                   setShowDeleteConfirm(false);
                   setBirthdayToDelete(null);
                 }}
-                className="flex-1 px-4 py-2 text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-xl transition-colors duration-200"
+                className="flex-1 px-4 py-2 text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors"
               >
                 Cancel
               </button>
               <button
                 onClick={handleDeleteConfirm}
                 disabled={deletingId === birthdayToDelete?._id}
-                className="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-xl transition-colors duration-200 flex items-center justify-center space-x-2 disabled:opacity-70"
+                className="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 disabled:bg-red-400 text-white rounded-lg transition-colors flex items-center justify-center space-x-2"
               >
                 {deletingId === birthdayToDelete?._id ? (
                   <>
@@ -265,20 +265,20 @@ function BirthdayList() {
         </div>
       )}
 
-      <div className="min-h-screen bg-gradient-to-br from-pink-50/50 via-purple-50/30 to-indigo-50/50 dark:from-gray-950 dark:via-slate-900 dark:to-black">
-        <div className="max-w-7xl mx-auto p-4 lg:p-8 pb-20 lg:pb-8">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+        <div className="max-w-6xl mx-auto p-4 lg:p-6 pb-20 lg:pb-8">
           {/* Header */}
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-8">
-            <div className="mb-6 lg:mb-0">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-6">
+            <div className="mb-4 lg:mb-0">
               <div className="flex items-center space-x-3 mb-2">
-                <div className="w-12 h-12 bg-gradient-to-br from-pink-400 to-purple-500 rounded-2xl flex items-center justify-center shadow-lg">
-                  <Calendar className="w-6 h-6 text-white" />
+                <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900/20 rounded-lg flex items-center justify-center">
+                  <Calendar className="w-6 h-6 text-purple-600 dark:text-purple-400" />
                 </div>
                 <div>
-                  <h1 className="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-pink-600 via-purple-600 to-indigo-600 dark:from-pink-400 dark:via-purple-400 dark:to-indigo-400 bg-clip-text text-transparent">
+                  <h1 className="text-2xl lg:text-3xl font-semibold text-gray-900 dark:text-white">
                     All Birthdays
                   </h1>
-                  <p className="text-gray-600 dark:text-gray-400 font-medium">
+                  <p className="text-gray-600 dark:text-gray-400">
                     Manage all your saved birthdays ({birthdays.length} total)
                   </p>
                 </div>
@@ -286,35 +286,35 @@ function BirthdayList() {
             </div>
             <button
               onClick={handleAddBirthday}
-              className="group flex items-center space-x-3 px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+              className="flex items-center space-x-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors"
             >
-              <Plus className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
-              <span className="font-semibold">Add Birthday</span>
+              <Plus className="w-5 h-5" />
+              <span className="font-medium">Add Birthday</span>
             </button>
           </div>
 
           {/* Search + Filters */}
-          <div className="bg-white/60 dark:bg-gray-900/90 backdrop-blur-lg rounded-3xl p-6 mb-8 border border-gray-200/50 dark:border-gray-700 shadow-lg">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-5 mb-6 border border-gray-200 dark:border-gray-700 shadow-sm">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
               {/* Search */}
               <div className="relative lg:col-span-2">
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <input
                   type="text"
                   placeholder="Search by name or notes..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3 bg-white/80 dark:bg-gray-800/80 border border-gray-200/50 dark:border-gray-700 rounded-xl focus:border-pink-400 dark:focus:border-purple-400 focus:ring-2 focus:ring-pink-400/20 dark:focus:ring-purple-400/20 transition-all duration-300 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
+                  className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-colors text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
                 />
               </div>
 
               {/* Month Filter */}
               <div className="relative">
-                <Calendar className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+                <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
                 <select
                   value={filterMonth}
                   onChange={(e) => setFilterMonth(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3 bg-white/80 dark:bg-gray-800/80 border border-gray-200/50 dark:border-gray-700 rounded-xl focus:border-pink-400 dark:focus:border-purple-400 focus:ring-2 focus:ring-pink-400/20 dark:focus:ring-purple-400/20 text-gray-900 dark:text-white appearance-none cursor-pointer"
+                  className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 text-gray-900 dark:text-white appearance-none cursor-pointer"
                 >
                   <option value="">All Months</option>
                   {monthNames.map((month, index) => (
@@ -327,11 +327,11 @@ function BirthdayList() {
 
               {/* Relation Filter */}
               <div className="relative">
-                <User className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+                <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
                 <select
                   value={filterRelation}
                   onChange={(e) => setFilterRelation(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3 bg-white/80 dark:bg-gray-800/80 border border-gray-200/50 dark:border-gray-700 rounded-xl focus:border-pink-400 dark:focus:border-purple-400 focus:ring-2 focus:ring-pink-400/20 dark:focus:ring-purple-400/20 text-gray-900 dark:text-white appearance-none cursor-pointer"
+                  className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 text-gray-900 dark:text-white appearance-none cursor-pointer"
                 >
                   <option value="">All Relations</option>
                   <option value="Friend">👥 Friend</option>
@@ -345,9 +345,9 @@ function BirthdayList() {
               {/* Clear Filters */}
               <button
                 onClick={clearFilters}
-                className="group flex items-center justify-center space-x-2 px-4 py-3 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl transition-all duration-300 hover:scale-105"
+                className="flex items-center justify-center space-x-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg transition-colors"
               >
-                <XCircle className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
+                <XCircle className="w-4 h-4" />
                 <span className="font-medium">Clear</span>
               </button>
             </div>
@@ -356,14 +356,14 @@ function BirthdayList() {
           {/* Birthday List */}
           <div className="space-y-4">
             {filteredBirthdays.length === 0 ? (
-              <div className="text-center py-16 bg-white/60 dark:bg-gray-900/90 backdrop-blur-lg rounded-3xl border border-gray-200/50 dark:border-gray-700">
-                <div className="w-24 h-24 bg-gradient-to-br from-pink-400 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
-                  <Calendar className="w-12 h-12 text-white" />
+              <div className="text-center py-12 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+                <div className="w-16 h-16 bg-purple-100 dark:bg-purple-900/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Calendar className="w-8 h-8 text-purple-600 dark:text-purple-400" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-4">
+                <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-2">
                   No birthdays found
                 </h3>
-                <p className="text-gray-600 dark:text-gray-400 mb-8 text-lg">
+                <p className="text-gray-600 dark:text-gray-400 mb-6">
                   {searchTerm || filterMonth || filterRelation
                     ? "Try adjusting your filters or search terms."
                     : "Start adding birthdays to build your celebration list!"}
@@ -371,17 +371,15 @@ function BirthdayList() {
                 {!searchTerm && !filterMonth && !filterRelation && (
                   <button
                     onClick={handleAddBirthday}
-                    className="group inline-flex items-center space-x-3 px-8 py-4 bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                    className="inline-flex items-center space-x-2 px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors"
                   >
-                    <Plus className="w-6 h-6 group-hover:rotate-90 transition-transform duration-300" />
-                    <span className="font-semibold text-lg">
-                      Add Your First Birthday
-                    </span>
+                    <Plus className="w-5 h-5" />
+                    <span className="font-medium">Add Your First Birthday</span>
                   </button>
                 )}
               </div>
             ) : (
-              filteredBirthdays.map((birthday, index) => {
+              filteredBirthdays.map((birthday) => {
                 const daysUntil = getDaysUntilBirthday(birthday.birthdate);
                 const isToday = daysUntil === 0;
                 const relationConfig = getRelationConfig(birthday.relation);
@@ -389,21 +387,20 @@ function BirthdayList() {
                 return (
                   <div
                     key={birthday._id}
-                    className={`group relative overflow-hidden bg-white/80 dark:bg-gray-900/90 backdrop-blur-lg rounded-3xl shadow-lg border hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 ${
+                    className={`group bg-white dark:bg-gray-800 rounded-lg shadow-sm border transition-colors ${
                       isToday
-                        ? "border-yellow-400/60 ring-2 ring-yellow-400/30 bg-gradient-to-r from-yellow-50/80 to-orange-50/80 dark:from-yellow-900/20 dark:to-orange-900/20"
-                        : "border-gray-200/50 dark:border-gray-700"
+                        ? "border-yellow-400 bg-yellow-50 dark:bg-yellow-900/10"
+                        : "border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600"
                     }`}
-                    style={{ animationDelay: `${index * 50}ms` }}
                   >
                     {isToday && (
-                      <div className="absolute top-4 right-4 flex items-center space-x-2 px-3 py-1 bg-yellow-400 text-yellow-900 dark:bg-yellow-500 dark:text-black rounded-full text-sm font-bold shadow-lg animate-pulse">
-                        <Sparkles className="w-4 h-4" />
-                        <span>TODAY!</span>
+                      <div className="absolute top-3 right-3 flex items-center space-x-1 px-2 py-1 bg-yellow-400 text-yellow-900 rounded-full text-xs font-medium">
+                        <Sparkles className="w-3 h-3" />
+                        <span>TODAY</span>
                       </div>
                     )}
 
-                    <div className="p-6">
+                    <div className="p-5">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-4 flex-1">
                           <div className="relative">
@@ -411,36 +408,34 @@ function BirthdayList() {
                               <img
                                 src={birthday.imageUrl}
                                 alt={birthday.name}
-                                className="w-16 h-16 rounded-2xl object-cover shadow-lg ring-2 ring-white/50"
+                                className="w-12 h-12 rounded-lg object-cover"
                               />
                             ) : (
-                              <div className="w-16 h-16 bg-gradient-to-br from-pink-400 to-purple-500 rounded-2xl flex items-center justify-center shadow-lg">
-                                <User className="w-8 h-8 text-white" />
+                              <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/20 rounded-lg flex items-center justify-center">
+                                <User className="w-6 h-6 text-purple-600 dark:text-purple-400" />
                               </div>
                             )}
                             {isToday && (
-                              <div className="absolute -top-1 -right-1 w-6 h-6 bg-yellow-400 dark:bg-yellow-500 rounded-full flex items-center justify-center">
-                                <PartyPopper className="w-3 h-3 text-yellow-900 dark:text-black animate-bounce" />
+                              <div className="absolute -top-1 -right-1 w-5 h-5 bg-yellow-400 rounded-full flex items-center justify-center">
+                                <PartyPopper className="w-2 h-2 text-yellow-900" />
                               </div>
                             )}
                           </div>
 
                           <div className="flex-1 min-w-0">
-                            <div className="flex items-center space-x-2 mb-2">
-                              <h3 className="text-xl font-bold text-gray-900 dark:text-white truncate">
+                            <div className="flex items-center space-x-2 mb-1">
+                              <h3 className="text-lg font-medium text-gray-900 dark:text-white truncate">
                                 {birthday.name}
                               </h3>
                               {isToday && (
-                                <Cake className="w-5 h-5 text-yellow-500 animate-bounce" />
+                                <Cake className="w-4 h-4 text-yellow-500" />
                               )}
                             </div>
 
-                            <div className="flex items-center space-x-3 text-gray-600 dark:text-gray-400 mb-3">
+                            <div className="flex items-center space-x-3 text-sm text-gray-600 dark:text-gray-400 mb-2">
                               <div className="flex items-center space-x-1">
                                 <Calendar className="w-4 h-4" />
-                                <span className="font-medium">
-                                  {formatDate(birthday.birthdate)}
-                                </span>
+                                <span>{formatDate(birthday.birthdate)}</span>
                               </div>
                               <span>•</span>
                               <span>Age {getAge(birthday.birthdate)}</span>
@@ -448,18 +443,18 @@ function BirthdayList() {
 
                             <div className="flex items-center space-x-3">
                               <div
-                                className={`inline-flex items-center space-x-2 px-3 py-1 rounded-full text-sm font-medium bg-gradient-to-r ${relationConfig.bg} ${relationConfig.text} border ${relationConfig.border}`}
+                                className={`inline-flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium ${relationConfig.bg} ${relationConfig.text} border ${relationConfig.border}`}
                               >
                                 <span>{relationConfig.icon}</span>
                                 <span>{birthday.relation}</span>
                               </div>
 
                               <div
-                                className={`px-3 py-1 rounded-full text-sm font-bold ${
+                                className={`px-2 py-1 rounded-full text-xs font-medium ${
                                   isToday
-                                    ? "bg-yellow-400 text-yellow-900 dark:bg-yellow-500 dark:text-black"
+                                    ? "bg-yellow-400 text-yellow-900"
                                     : daysUntil <= 7
-                                    ? "bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400"
+                                    ? "bg-orange-100 dark:bg-orange-900/20 text-orange-700 dark:text-orange-400"
                                     : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300"
                                 }`}
                               >
@@ -468,28 +463,28 @@ function BirthdayList() {
                             </div>
 
                             {birthday.note && (
-                              <p className="text-sm text-gray-700 dark:text-gray-300 bg-gray-100/50 dark:bg-gray-800/50 px-3 py-2 rounded-lg mt-3 line-clamp-2">
-                                <Gift className="w-4 h-4 inline mr-2 text-pink-500" />
+                              <p className="text-sm text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-700 px-3 py-2 rounded-md mt-2 line-clamp-2">
+                                <Gift className="w-3 h-3 inline mr-2 text-purple-500" />
                                 {birthday.note}
                               </p>
                             )}
                           </div>
                         </div>
 
-                        <div className="flex items-center space-x-2 ml-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <div className="flex items-center space-x-1 ml-4 opacity-0 group-hover:opacity-100 transition-opacity">
                           <button
                             onClick={() => handleEditBirthday(birthday)}
-                            className="p-3 text-gray-500 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-xl transition-all duration-200 hover:scale-110"
+                            className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
                             title="Edit Birthday"
                           >
-                            <Edit2 className="w-5 h-5" />
+                            <Edit2 className="w-4 h-4" />
                           </button>
                           <button
                             onClick={() => handleDeleteClick(birthday)}
-                            className="p-3 text-gray-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-xl transition-all duration-200 hover:scale-110"
+                            className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
                             title="Delete Birthday"
                           >
-                            <Trash2 className="w-5 h-5" />
+                            <Trash2 className="w-4 h-4" />
                           </button>
                         </div>
                       </div>
@@ -503,9 +498,9 @@ function BirthdayList() {
           {/* Floating Add Button */}
           <button
             onClick={handleAddBirthday}
-            className="lg:hidden fixed bottom-6 right-6 w-16 h-16 bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white rounded-full shadow-2xl flex items-center justify-center z-40 hover:scale-110 transition-all duration-300 animate-bounce"
+            className="lg:hidden fixed bottom-6 right-6 w-14 h-14 bg-purple-600 hover:bg-purple-700 text-white rounded-full shadow-lg flex items-center justify-center z-40 transition-colors"
           >
-            <Plus className="w-7 h-7" />
+            <Plus className="w-6 h-6" />
           </button>
 
           {/* Modal */}

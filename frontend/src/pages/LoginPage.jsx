@@ -95,55 +95,44 @@ const LoginPage = () => {
   if (googleLoading) return <Loading />;
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50 dark:from-slate-900 dark:via-purple-900/20 dark:to-indigo-900/20 relative overflow-hidden">
-      {/* Background Decorations */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-10 left-10 w-20 h-20 bg-pink-200/30 dark:bg-pink-500/10 rounded-full animate-pulse"></div>
-        <div className="absolute top-32 right-20 w-16 h-16 bg-purple-200/30 dark:bg-purple-500/10 rounded-full animate-pulse delay-1000"></div>
-        <div className="absolute bottom-20 left-1/4 w-12 h-12 bg-indigo-200/30 dark:bg-indigo-500/10 rounded-full animate-pulse delay-2000"></div>
-        <div className="absolute bottom-40 right-10 w-24 h-24 bg-yellow-200/30 dark:bg-yellow-500/10 rounded-full animate-pulse delay-500"></div>
-      </div>
-
-      <div className="max-w-md w-full space-y-8 relative z-10">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-gray-50 dark:bg-gray-900">
+      <div className="max-w-md w-full space-y-6">
         {/* Main Card */}
-        <div className="bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl p-8 rounded-3xl shadow-2xl border-2 border-pink-200/50 dark:border-purple-600/30 animate-in slide-in-from-bottom-4 duration-700">
+        <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700">
           {/* Logo Section */}
           <div className="text-center mb-8">
             <div className="relative mx-auto mb-6">
-              <div className="w-20 h-20 bg-gradient-to-br from-pink-400 via-purple-500 to-indigo-500 rounded-2xl flex items-center justify-center shadow-2xl transform hover:scale-110 transition-all duration-300 mx-auto">
-                <Gift className="w-10 h-10 text-white animate-pulse" />
+              <div className="w-16 h-16 bg-purple-600 rounded-xl flex items-center justify-center shadow-md mx-auto">
+                <Gift className="w-8 h-8 text-white" />
               </div>
-              <div className="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-full flex items-center justify-center shadow-lg animate-bounce">
-                <Cake className="w-4 h-4 text-white" />
-              </div>
-              <div className="absolute -bottom-1 -left-1 w-6 h-6 bg-gradient-to-r from-green-400 to-emerald-400 rounded-full flex items-center justify-center shadow-md">
-                <PartyPopper className="w-3 h-3 text-white" />
+              <div className="absolute -top-1 -right-1 w-6 h-6 bg-yellow-400 rounded-full flex items-center justify-center shadow-sm">
+                <Cake className="w-3 h-3 text-white" />
               </div>
             </div>
 
             <div className="space-y-2">
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-pink-500 via-purple-600 to-indigo-600 dark:from-pink-400 dark:via-purple-400 dark:to-indigo-400 bg-clip-text text-transparent">
+              <h1 className="text-3xl font-bold text-purple-600 dark:text-purple-400">
                 Bornify
               </h1>
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
                 Welcome Back! 🎉
               </h2>
-              <p className="text-gray-600 dark:text-gray-400 font-medium">
+              <p className="text-gray-600 dark:text-gray-400">
                 Sign in to celebrate more birthdays
               </p>
             </div>
           </div>
 
           {/* Form */}
-          <form className="space-y-6" onSubmit={handleSubmit}>
+          <form className="space-y-5" onSubmit={handleSubmit}>
             {/* Email */}
             <div className="space-y-2">
-              <label className="flex items-center space-x-2 text-sm font-semibold text-gray-700 dark:text-gray-300">
-                <Mail className="w-4 h-4 text-pink-500" />
+              <label className="flex items-center space-x-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                <Mail className="w-4 h-4 text-purple-500" />
                 <span>Email Address</span>
               </label>
               <div className="relative">
-                <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <input
                   type="email"
                   name="email"
@@ -151,30 +140,30 @@ const LoginPage = () => {
                   onChange={handleChange}
                   disabled={otpSent}
                   placeholder="Enter your email address"
-                  className={`w-full pl-12 pr-4 py-4 bg-white/80 dark:bg-slate-700/80 border-2 rounded-2xl focus:ring-2 transition-all duration-300 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 ${
+                  className={`w-full pl-10 pr-4 py-3 border rounded-lg transition-colors text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 ${
                     otpSent
-                      ? "border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50"
-                      : "border-pink-200/50 dark:border-purple-600/30 focus:border-pink-400 dark:focus:border-purple-400 focus:ring-pink-400/20 dark:focus:ring-purple-400/20"
+                      ? "border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700"
+                      : "border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20"
                   }`}
                   required
-                />{" "}
+                />
                 {otpSent && (
-                  <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
-                    <CheckCircle className="w-5 h-5 text-green-500" />
+                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                    <CheckCircle className="w-4 h-4 text-green-500" />
                   </div>
-                )}{" "}
+                )}
               </div>
             </div>
 
             {/* OTP */}
             {otpSent && (
-              <div className="space-y-2 animate-in slide-in-from-right-4 duration-500">
-                <label className="flex items-center space-x-2 text-sm font-semibold text-gray-700 dark:text-gray-300">
-                  <Shield className="w-4 h-4 text-pink-500" />
+              <div className="space-y-2">
+                <label className="flex items-center space-x-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <Shield className="w-4 h-4 text-purple-500" />
                   <span>Verification Code</span>
                 </label>
                 <div className="relative">
-                  <Shield className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Shield className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                   <input
                     type={isShowPassword ? "text" : "password"}
                     name="otp"
@@ -182,19 +171,19 @@ const LoginPage = () => {
                     onChange={handleChange}
                     placeholder="• • • • • •"
                     maxLength={6}
-                    className="w-full pl-12 pr-12 py-4 bg-white/80 dark:bg-slate-700/80 border-2 border-pink-200/50 dark:border-purple-600/30 rounded-2xl focus:border-pink-400 dark:focus:border-purple-400 focus:ring-2 focus:ring-pink-400/20 dark:focus:ring-purple-400/20 transition-all duration-300 text-gray-900 dark:text-white text-center tracking-widest font-mono text-lg"
+                    className="w-full pl-10 pr-10 py-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-colors text-gray-900 dark:text-white text-center tracking-widest font-mono"
                     required
                   />
                   <button
                     type="button"
                     onClick={() => setIsShowPassword(!isShowPassword)}
-                    className="absolute right-4 top-1/2 transform -translate-y-1/2 p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors duration-200"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1 hover:bg-gray-100 dark:hover:bg-gray-600 rounded transition-colors"
                   >
                     {isShowPassword ? (
-                      <EyeOff className="w-5 h-5 text-gray-400" />
+                      <EyeOff className="w-4 h-4 text-gray-400" />
                     ) : (
-                      <Eye className="w-5 h-5 text-gray-400" />
-                    )}{" "}
+                      <Eye className="w-4 h-4 text-gray-400" />
+                    )}
                   </button>
                 </div>
               </div>
@@ -202,16 +191,16 @@ const LoginPage = () => {
 
             {/* Success Message */}
             {otpSent && (
-              <div className="bg-gradient-to-r from-emerald-50 to-green-50 dark:from-emerald-900/30 dark:to-green-900/30 border-2 border-emerald-200/60 dark:border-emerald-700/60 rounded-2xl p-4 animate-in slide-in-from-left-4 duration-500">
+              <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
                 <div className="flex items-start space-x-3">
-                  <div className="w-8 h-8 bg-emerald-100 dark:bg-emerald-800/50 rounded-full flex items-center justify-center flex-shrink-0">
-                    <CheckCircle className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                  <div className="w-6 h-6 bg-green-100 dark:bg-green-800 rounded-full flex items-center justify-center flex-shrink-0">
+                    <CheckCircle className="w-4 h-4 text-green-600 dark:text-green-400" />
                   </div>
                   <div className="flex-1">
-                    <p className="text-emerald-800 dark:text-emerald-200 font-semibold mb-1">
+                    <p className="text-green-800 dark:text-green-200 font-medium mb-1">
                       🎯 OTP sent successfully!
                     </p>
-                    <p className="text-emerald-700 dark:text-emerald-300 text-sm">
+                    <p className="text-green-700 dark:text-green-300 text-sm">
                       Check your email for the 6-digit code. It expires in 10
                       minutes.
                     </p>
@@ -222,13 +211,13 @@ const LoginPage = () => {
 
             {/* Error Message */}
             {otpError && (
-              <div className="bg-gradient-to-r from-red-50 to-pink-50 dark:from-red-900/30 dark:to-pink-900/30 border-2 border-red-200/60 dark:border-red-700/60 rounded-2xl p-4 animate-in slide-in-from-left-4 duration-300">
+              <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
                 <div className="flex items-start space-x-3">
-                  <div className="w-8 h-8 bg-red-100 dark:bg-red-800/50 rounded-full flex items-center justify-center flex-shrink-0">
-                    <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400" />
+                  <div className="w-6 h-6 bg-red-100 dark:bg-red-800 rounded-full flex items-center justify-center flex-shrink-0">
+                    <AlertCircle className="w-4 h-4 text-red-600 dark:text-red-400" />
                   </div>
                   <p className="text-red-800 dark:text-red-200 font-medium flex-1">
-                    {otpError}{" "}
+                    {otpError}
                   </p>
                 </div>
               </div>
@@ -240,47 +229,46 @@ const LoginPage = () => {
               disabled={
                 sendingOtp || verifying || (otpSent && formData.otp.length < 6)
               }
-              className="w-full py-4 px-6 bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 disabled:from-gray-400 disabled:to-gray-500 text-white font-semibold rounded-2xl shadow-lg hover:shadow-xl disabled:shadow-md transition-all duration-300 transform hover:scale-105 disabled:scale-100 disabled:cursor-not-allowed flex items-center justify-center space-x-3"
+              className="w-full py-3 px-4 bg-purple-600 hover:bg-purple-700 disabled:bg-gray-400 text-white font-medium rounded-lg shadow-sm hover:shadow-md disabled:shadow-sm transition-all disabled:cursor-not-allowed flex items-center justify-center space-x-2"
             >
               {sendingOtp ? (
                 <>
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                  <span>Sending Magic Code...</span>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <span>Sending Code...</span>
                 </>
               ) : verifying ? (
                 <>
-                  <Loader2 className="w-5 h-5 animate-spin" />
+                  <Loader2 className="w-4 h-4 animate-spin" />
                   <span>Verifying...</span>
                 </>
               ) : otpSent ? (
                 <>
-                  <Shield className="w-5 h-5" />
+                  <Shield className="w-4 h-4" />
                   <span>Verify & Sign In</span>
-                  <Sparkles className="w-4 h-4 animate-pulse" />
                 </>
               ) : (
                 <>
-                  <Mail className="w-5 h-5" />
+                  <Mail className="w-4 h-4" />
                   <span>Send Verification Code</span>
                 </>
-              )}{" "}
+              )}
             </button>
           </form>
 
           {/* Divider */}
-          <div className="relative my-8">
+          <div className="relative my-6">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t-2 border-gray-200 dark:border-gray-600" />
+              <div className="w-full border-t border-gray-200 dark:border-gray-600" />
             </div>
             <div className="relative flex justify-center">
-              <span className="px-4 bg-white/90 dark:bg-slate-800/90 text-gray-500 dark:text-gray-400 font-medium">
+              <span className="px-3 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 text-sm">
                 Or continue with
               </span>
             </div>
           </div>
 
           {/* Google Login */}
-          <div className="transform hover:scale-105 transition-all duration-300">
+          <div>
             <GoogleLogin
               onSuccess={handleGoogleSuccess}
               onError={() =>
@@ -293,22 +281,22 @@ const LoginPage = () => {
           </div>
 
           {/* Switch to Signup */}
-          <div className="text-center mt-8 p-4 bg-gray-50/50 dark:bg-gray-700/30 rounded-2xl">
-            <span className="text-gray-600 dark:text-gray-400 font-medium">
+          <div className="text-center mt-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+            <span className="text-gray-600 dark:text-gray-400">
               New to celebrating birthdays? 🎈{" "}
             </span>
             <Link
               to="/signup"
-              className="text-pink-600 hover:text-purple-600 dark:text-pink-400 dark:hover:text-purple-400 font-bold transition-colors duration-300 hover:underline"
+              className="text-purple-600 hover:text-purple-700 dark:text-purple-400 dark:hover:text-purple-300 font-medium transition-colors hover:underline"
             >
               Join the party!
             </Link>
           </div>
         </div>
 
-        {/* Bottom Decoration */}
+        {/* Bottom Text */}
         <div className="text-center">
-          <p className="text-gray-500 dark:text-gray-400 text-sm font-medium">
+          <p className="text-gray-500 dark:text-gray-400 text-sm">
             🎂 Never miss a celebration again 🎉
           </p>
         </div>

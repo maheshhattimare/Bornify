@@ -69,7 +69,7 @@ const SignupPage = () => {
           otp: formData.otp,
         });
         localStorage.setItem("token", res.data.token);
-        window.location.href = "/";
+        window.location.href = "/home";
       } catch (err) {
         setOtpError(err?.response?.data?.message || "Invalid OTP");
       } finally {
@@ -85,7 +85,7 @@ const SignupPage = () => {
         credential: response.credential,
       });
       localStorage.setItem("token", res.data.token);
-      window.location.href = "/";
+      window.location.href = "/home";
     } catch (err) {
       setOtpError("Google login failed. Please try again.");
     } finally {

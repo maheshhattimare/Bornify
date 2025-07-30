@@ -471,7 +471,7 @@ function BirthdayList() {
                           </div>
                         </div>
 
-                        <div className="flex items-center space-x-1 ml-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="flex items-center space-x-1 ml-4 sm:opacity-0 group-hover:opacity-100 transition-opacity">
                           <button
                             onClick={() => handleEditBirthday(birthday)}
                             className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors"

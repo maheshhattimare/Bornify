@@ -117,7 +117,7 @@ export const updateBirthday = async (req, res) => {
     if (name) birthday.name = name;
     if (birthdate) birthday.birthdate = birthdate;
     if (relation) birthday.relation = relation;
-    if (note) birthday.note = note;
+    if (note !== undefined) birthday.note = note;
     if (notifyBeforeDays !== undefined)
       birthday.notifyBeforeDays = notifyBeforeDays;
 

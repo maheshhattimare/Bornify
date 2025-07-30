@@ -65,7 +65,7 @@ const LoginPage = () => {
           otp: formData.otp,
         });
         localStorage.setItem("token", res.data.token);
-        navigate("/");
+        navigate("/home");
       } catch (err) {
         const msg =
           err?.response?.data?.message || "Invalid OTP. Please try again.";
@@ -84,7 +84,7 @@ const LoginPage = () => {
         credential: response.credential,
       });
       localStorage.setItem("token", res.data.token);
-      navigate("/");
+      navigate("/home");
     } catch {
       setOtpError("Google login failed. Please try again.");
     } finally {

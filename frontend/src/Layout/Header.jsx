@@ -2,7 +2,7 @@ import { useRef, useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../hooks/useTheme.js";
 import { LogOut, Moon, Sun, Gift, Cake } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Header = () => {
   const { user, loadingUser } = useAuth();
@@ -11,6 +11,9 @@ const Header = () => {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const profileRef = useRef(null);
   const navigate = useNavigate();
+
+  const location = useLocation();
+  const isHomePage = location.pathname === "/home";
 
   // Handles closing the profile dropdown when clicking outside of it
   useEffect(() => {
@@ -47,19 +50,21 @@ const Header = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo Section */}
-          <div className="flex items-center space-x-3 cursor-pointer">
-            <div className="w-8 h-8 bg-blue-600 dark:bg-blue-500 rounded-lg flex items-center justify-center">
-              <Gift className="w-4 h-4 text-white" />
+          <a href={isHomePage ? "#" : "/home"}>
+            <div className="flex items-center space-x-3 cursor-pointer">
+              <div className="w-8 h-8 bg-blue-600 dark:bg-blue-500 rounded-lg flex items-center justify-center">
+                <Gift className="w-4 h-4 text-white" />
+              </div>
+              <div className="flex flex-col">
+                <h1 className="text-xl font-semibold text-gray-900 dark:text-white">
+                  Bornify
+                </h1>
+                <span className="text-xs text-gray-500 dark:text-gray-400 -mt-1">
+                  Birthday Reminders
+                </span>
+              </div>
             </div>
-            <div className="flex flex-col">
-              <h1 className="text-xl font-semibold text-gray-900 dark:text-white">
-                Bornify
-              </h1>
-              <span className="text-xs text-gray-500 dark:text-gray-400 -mt-1">
-                Birthday Reminders
-              </span>
-            </div>
-          </div>
+          </a>
 
           {/* Actions Section */}
           <div className="flex items-center space-x-3">
@@ -115,11 +120,26 @@ const Header = () => {
                   </div>
 
                   {/* Profile Actions */}
-                  <div className="p-2">
+                  <div className="p-2 space-y-1">
+                    {/* All Birthdays Navigation */}
+                    <a
+                      href="/birthdays"
+                      className="block w-full text-start px-3 ps-6 py-2 text-sm font-normal text-gray-700 dark:text-gray-300 hover:bg-gray-100 hover:text-blue-600 dark:hover:bg-gray-700 rounded-md transition-colors"
+                    >
+                      All Birthdays
+                    </a>
+                    {/* Settings Navigation */}
+                    <a
+                      href="/settings"
+                      className="block w-full text-start  px-3 py-2 ps-6 text-sm font-normal text-gray-700 dark:text-gray-300 hover:bg-gray-100 hover:text-blue-600 dark:hover:bg-gray-700 rounded-md transition-colors"
+                    >
+                      Settings
+                    </a>
+                    <hr className="border-t border-gray-300 dark:border-gray-700" />
                     <button
                       onClick={handleLogout}
                       disabled={isLoggingOut}
-                      className="w-full flex items-center justify-center space-x-2 px-3 py-2 text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-md transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="w-full flex items-center justify-start space-x-2 px-3 py-3 ps-6 text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-md transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {isLoggingOut ? (
                         <>

@@ -11,6 +11,7 @@ const AppLayout = () => {
     "/login",
     "/signup",
     "/404",
+    "/",
     "/reset-password/:token", // dynamic example
   ];
 

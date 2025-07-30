@@ -9,6 +9,8 @@ import PublicRoute from "./routes/PublicRoute";
 import BirthdayList from "./pages/BirthdayList";
 import { AuthProvider } from "./context/AuthContext";
 import AppLayout from "./Layout/AppLayout";
+import Settings from "./pages/Settings";
+import LandingPage from "./pages/LandingPage";
 
 const App = () => {
   return (
@@ -20,6 +22,14 @@ const App = () => {
             <Route
               path="/"
               element={
+                <PublicRoute>
+                  <LandingPage />
+                </PublicRoute>
+              }
+            />
+            <Route
+              path="/home"
+              element={
                 <PrivateRoute>
                   <Dashboard />
                 </PrivateRoute>
@@ -30,6 +40,14 @@ const App = () => {
               element={
                 <PrivateRoute>
                   <BirthdayList />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/settings"
+              element={
+                <PrivateRoute>
+                  <Settings />
                 </PrivateRoute>
               }
             />

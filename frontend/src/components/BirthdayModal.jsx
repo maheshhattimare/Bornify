@@ -17,7 +17,7 @@ const BirthdayModal = ({ birthday, onSave, onClose }) => {
     birthdate: "",
     relation: "",
     note: "",
-    notifyBeforeDays: 7, // Default reminder 7 days before
+    notifyBeforeDays: 2, // Default reminder 2 days before
     avatar: null,
   });
 

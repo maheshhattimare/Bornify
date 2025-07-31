@@ -1,23 +1,13 @@
-// utils/birthdayReminder.js
-import cron from "node-cron";
+// jobs/cronJob.js
+
+import dotenv from "dotenv";
+import mongoose from "mongoose";
 import nodemailer from "nodemailer";
 import Birthday from "../models/Birthday.js";
 import User from "../models/User.js";
-// For user email
+import connectDB from "../config/db.js";
 
-// Email transporter
-const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-        user: process.env.EMAIL_USER, // your Gmail address
-        pass: process.env.EMAIL_PASS, // app password, not your main Gmail password
-    }
-});
-
-// Helper function to check if email is configured
-const isEmailConfigured = () => {
-    return process.env.EMAIL_USER && process.env.EMAIL_PASS;
-};
+dotenv.config();
 
 // Helper function to get date in local timezone
 const getLocalDate = () => {
@@ -25,123 +15,86 @@ const getLocalDate = () => {
     return new Date(now.getFullYear(), now.getMonth(), now.getDate());
 };
 
-// Run at 8:00 AM every day
-cron.schedule("0 8 * * *", async () => {
-    console.log("⏰ Birthday reminder job running...");
+// Main job logic, now exported as a function
+export const runBirthdayReminders = async () => {
+    console.log("⏰ Cron job triggered by API endpoint...");
 
-    // Check if email is configured
-    if (! isEmailConfigured()) {
-        console.error("❌ Email configuration missing. Please set EMAIL_USER and EMAIL_PASS environment variables.");
-        return;
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+        console.error("❌ Email configuration is missing on the server.");
+        return { success: false, message: "Email configuration missing." };
     }
 
-    const today = getLocalDate();
+    const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS,
+        },
+    });
 
-    try { // Get all birthdays with user info
-        const birthdays = await Birthday.find().populate("userId", "email name") // get user email + name.lean();
+    let status = { success: true, message: "Job finished.", sent: 0, failed: 0 };
 
-        console.log(`📅 Found ${
-            birthdays.length
-        } birthdays to check`);
+    try {
+        await connectDB();
+        console.log("🗄️ Database connected for cron job.");
 
-        let emailsSent = 0;
-        let emailsFailed = 0;
+        const today = getLocalDate();
+        const birthdays = await Birthday.find().populate("userId", "email name").lean();
+        console.log(`📅 Found ${birthdays.length} total birthdays to check.`);
 
         for (const birthday of birthdays) {
-            if (! birthday.userId ?. email) {
-                console.log(`⚠️ Skipping ${
-                    birthday.name
-                } - no user email found`);
+            if (!birthday.userId?.email) {
+                console.log(`⚠️ Skipping ${birthday.name} - no user email found`);
                 continue;
             }
 
             const birthDate = new Date(birthday.birthdate);
             const thisYearBirthday = new Date(today.getFullYear(), birthDate.getMonth(), birthDate.getDate());
 
-            // If birthday already passed this year, set to next year
             if (thisYearBirthday < today) {
                 thisYearBirthday.setFullYear(today.getFullYear() + 1);
             }
 
-            // Calculate reminder date based on notifyBeforeDays
-            const daysBefore = birthday.notifyBeforeDays ?? 1; // default 1 day
+            const daysBefore = birthday.notifyBeforeDays ?? 1;
             const reminderDate = new Date(thisYearBirthday);
             reminderDate.setDate(reminderDate.getDate() - daysBefore);
-
-            // Compare dates (reset time to midnight for accurate comparison)
             reminderDate.setHours(0, 0, 0, 0);
+
             const todayMidnight = new Date(today);
             todayMidnight.setHours(0, 0, 0, 0);
 
             if (reminderDate.getTime() === todayMidnight.getTime()) {
-                console.log(`🎂 Sending reminder for ${
-                    birthday.name
-                } (${daysBefore} day${
-                    daysBefore > 1 ? 's' : ''
-                } before)`);
-
+                console.log(`🎂 Preparing reminder for ${birthday.name}...`);
                 const emailOptions = {
-                    from: process.env.EMAIL_USER,
+                    from: `"Bornify" <${process.env.EMAIL_USER}>`,
                     to: birthday.userId.email,
-                    subject: `🎉 Reminder: ${
-                        birthday.name
-                    }'s Birthday in ${daysBefore} day${
-                        daysBefore > 1 ? "s" : ""
-                    }!`,
-                    text: `Hey ${
-                        birthday.userId.name || "there"
-                    },\n\nDon't forget — ${
-                        birthday.name
-                    }'s birthday is coming up in ${daysBefore} day${
-                        daysBefore > 1 ? "s" : ""
-                    }! 🎂\n\n- Bornify`,
-                    html: `
-            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-              <h2 style="color: #e91e63;">🎉 Birthday Reminder!</h2>
-              <p>Hey ${
-                        birthday.userId.name || "there"
-                    },</p>
-              <p>Don't forget — <strong>${
-                        birthday.name
-                    }</strong>'s birthday is coming up in <strong>${daysBefore} day${
-                        daysBefore > 1 ? "s" : ""
-                    }</strong>! 🎂</p>
-              <p style="margin-top: 30px; color: #666;">- Bornify Team</p>
-            </div>
-          `
+                    subject: `🎉 Reminder: ${birthday.name}'s Birthday in ${daysBefore} day${daysBefore > 1 ? 's' : ''}!`,
+                    html: `<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                           <h2 style="color: #e91e63;">🎉 Birthday Reminder!</h2>
+                           <p>Hey ${birthday.userId.name || "there"},</p>
+                           <p>Don't forget — <strong>${birthday.name}</strong>'s birthday is coming up in <strong>${daysBefore} day${daysBefore > 1 ? "s" : ""}</strong>! 🎂</p>
+                           <p style="margin-top: 30px; color: #666;">- Bornify Team</p>
+                         </div>`,
                 };
 
                 try {
-                    await new Promise((resolve, reject) => {
-                        transporter.sendMail(emailOptions, (err, info) => {
-                            if (err) {
-                                console.error(`❌ Error sending email to ${
-                                    birthday.userId.email
-                                }:`, err);
-                                emailsFailed++;
-                                reject(err);
-                            } else {
-                                console.log(`✅ Reminder sent to ${
-                                    birthday.userId.email
-                                } for ${
-                                    birthday.name
-                                }`);
-                                emailsSent++;
-                                resolve(info);
-                            }
-                        });
-                    });
+                    await transporter.sendMail(emailOptions);
+                    console.log(`✅ Reminder sent to ${birthday.userId.email} for ${birthday.name}`);
+                    status.sent++;
                 } catch (emailError) {
-                    console.error(`❌ Failed to send email for ${
-                        birthday.name
-                    }:`, emailError);
-                    emailsFailed++;
+                    console.error(`❌ Failed to send email for ${birthday.name}:`, emailError.message);
+                    status.failed++;
                 }
             }
         }
-
-        console.log(`📊 Reminder job completed: ${emailsSent} sent, ${emailsFailed} failed`);
     } catch (error) {
-        console.error("❌ Error running birthday reminder job:", error);
+        console.error("❌ A critical error occurred in the reminder job:", error);
+        status = { success: false, message: error.message };
+    } finally {
+        await mongoose.disconnect();
+        console.log("🔌 Database disconnected.");
     }
-});
+
+    console.log(`📊 Job summary: ${status.sent} sent, ${status.failed} failed.`);
+    return status;
+};

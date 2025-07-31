@@ -1,5 +1,4 @@
 // jobs/cronJob.js
-
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import nodemailer from "nodemailer";
@@ -9,28 +8,22 @@ import connectDB from "../config/db.js";
 
 dotenv.config();
 
-// Helper function to get date in local timezone
-const getLocalDate = () => {
+// Helper to get today's date at midnight in UTC for consistent server-side date handling
+const getTodayAtMidnightUTC = () => {
   const now = new Date();
-  return new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  return new Date(
+    Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate())
+  );
 };
 
-// Main job logic, now exported as a function
+// Main job logic - SECURE & ENHANCED VERSION
 export const runBirthdayReminders = async () => {
-  console.log("⏰ Cron job triggered by API endpoint...");
+  console.log("⏰ Starting SECURE birthday reminder job...");
 
   if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-    console.error("❌ Email configuration is missing on the server.");
+    console.error("❌ Email configuration is missing.");
     return { success: false, message: "Email configuration missing." };
   }
-
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
-    },
-  });
 
   let status = { success: true, message: "Job finished.", sent: 0, failed: 0 };
 
@@ -38,66 +31,115 @@ export const runBirthdayReminders = async () => {
     await connectDB();
     console.log("🗄️ Database connected for cron job.");
 
-    const today = getLocalDate();
-    const birthdays = await Birthday.find()
-      .populate("userId", "email name")
-      .lean();
-    console.log(`📅 Found ${birthdays.length} total birthdays to check.`);
+    const todayUTC = getTodayAtMidnightUTC();
 
-    for (const birthday of birthdays) {
-      if (!birthday.userId?.email) {
-        console.log(`⚠️ Skipping ${birthday.name} - no user email found`);
-        continue;
+    // 1. Find all users in the database to process them one by one
+    const allUsers = await User.find({}).lean();
+    console.log(`👥 Found ${allUsers.length} total users to check.`);
+
+    // 2. Loop through each user individually to ensure data privacy
+    for (const user of allUsers) {
+      // Find ONLY the birthdays that belong to the current user
+      const userBirthdays = await Birthday.find({ userId: user._id }).lean();
+
+      if (userBirthdays.length === 0) {
+        continue; // Skip to the next user if they have no birthdays
       }
 
-      const birthDate = new Date(birthday.birthdate);
-      const thisYearBirthday = new Date(
-        today.getFullYear(),
-        birthDate.getMonth(),
-        birthDate.getDate()
-      );
+      const remindersForThisUser = [];
 
-      if (thisYearBirthday < today) {
-        thisYearBirthday.setFullYear(today.getFullYear() + 1);
+      // 3. Check each of THIS USER'S birthdays to see if a reminder is due today
+      for (const birthday of userBirthdays) {
+        const birthDate = new Date(birthday.birthdate);
+        const thisYearBirthday = new Date(
+          Date.UTC(
+            todayUTC.getUTCFullYear(),
+            birthDate.getUTCMonth(),
+            birthDate.getUTCDate()
+          )
+        );
+
+        const daysBefore = birthday.notifyBeforeDays ?? 1;
+        const reminderDate = new Date(thisYearBirthday);
+        reminderDate.setUTCDate(reminderDate.getUTCDate() - daysBefore);
+
+        // Compare if today is the exact reminder day
+        if (reminderDate.getTime() === todayUTC.getTime()) {
+          remindersForThisUser.push({
+            name: birthday.name,
+            daysBefore: daysBefore,
+          });
+        }
       }
 
-      const daysBefore = birthday.notifyBeforeDays ?? 1;
-      const reminderDate = new Date(thisYearBirthday);
-      reminderDate.setDate(reminderDate.getDate() - daysBefore);
-      reminderDate.setHours(0, 0, 0, 0);
+      // 4. If there are reminders for this user, build and send ONE email
+      if (remindersForThisUser.length > 0) {
+        console.log(
+          `✅ Found ${remindersForThisUser.length} reminder(s) for user ${user.email}.`
+        );
 
-      const todayMidnight = new Date(today);
-      todayMidnight.setHours(0, 0, 0, 0);
+        // --- Enhanced Email HTML ---
+        const reminderListHtml = remindersForThisUser
+          .map(
+            (r) =>
+              `<div style="background-color: #ffffff; border-left: 4px solid #e91e63; padding: 15px; margin-bottom: 10px; border-radius: 4px;">
+                        <p style="margin: 0; font-size: 16px; color: #333;">
+                            <strong>${
+                              r.name
+                            }</strong>'s birthday is in <strong>${
+                r.daysBefore
+              } day${r.daysBefore > 1 ? "s" : ""}</strong>!
+                        </p>
+                    </div>`
+          )
+          .join("");
 
-      if (reminderDate.getTime() === todayMidnight.getTime()) {
-        console.log(`🎂 Preparing reminder for ${birthday.name}...`);
+        const emailHtml = `
+                    <div style="font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; background-color: #f4f4f7; padding: 20px; text-align: center;">
+                        <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; overflow: hidden;">
+                            <div style="background-color: #e91e63; color: #ffffff; padding: 20px;">
+                                <h1 style="margin: 0; font-size: 24px;">Bornify</h1>
+                            </div>
+                            <div style="padding: 30px; text-align: left;">
+                                <h2 style="font-size: 20px; color: #333;">Hey ${
+                                  user.name || "there"
+                                },</h2>
+                                <p style="font-size: 16px; color: #555; line-height: 1.5;">
+                                    Here are your friendly birthday reminders for today:
+                                </p>
+                                <div style="margin-top: 20px;">
+                                    ${reminderListHtml}
+                                </div>
+                                <p style="font-size: 16px; color: #555; line-height: 1.5; margin-top: 30px;">
+                                    Have a great day!
+                                </p>
+                            </div>
+                            <div style="background-color: #f4f4f7; padding: 20px; font-size: 12px; color: #888;">
+                                <p style="margin: 0;">You received this email because you use Bornify.</p>
+                                <p style="margin: 5px 0 0 0;">&copy; ${new Date().getFullYear()} Bornify. All rights reserved.</p>
+                            </div>
+                        </div>
+                    </div>`;
+
+        const transporter = nodemailer.createTransport({
+          service: "gmail",
+          auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS },
+        });
+
         const emailOptions = {
           from: `"Bornify" <${process.env.EMAIL_USER}>`,
-          to: birthday.userId.email,
-          subject: `🎉 Reminder: ${
-            birthday.name
-          }'s Birthday in ${daysBefore} day${daysBefore > 1 ? "s" : ""}!`,
-          html: `<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-                           <h2 style="color: #e91e63;">🎉 Birthday Reminder!</h2>
-                           <p>Hey ${birthday.userId.name || "there"},</p>
-                           <p>Don't forget — <strong>${
-                             birthday.name
-                           }</strong>'s birthday is coming up in <strong>${daysBefore} day${
-            daysBefore > 1 ? "s" : ""
-          }</strong>! 🎂</p>
-                           <p style="margin-top: 30px; color: #666;">- Bornify Team</p>
-                         </div>`,
+          to: user.email, // Send email ONLY to the current user
+          subject: `🎉 You have ${remindersForThisUser.length} birthday reminder(s) today!`,
+          html: emailHtml,
         };
 
         try {
           await transporter.sendMail(emailOptions);
-          console.log(
-            `✅ Reminder sent to ${birthday.userId.email} for ${birthday.name}`
-          );
+          console.log(`👍 Email sent successfully to ${user.email}.`);
           status.sent++;
         } catch (emailError) {
           console.error(
-            `❌ Failed to send email for ${birthday.name}:`,
+            `❌ Failed to send email to ${user.email}:`,
             emailError.message
           );
           status.failed++;
@@ -108,8 +150,7 @@ export const runBirthdayReminders = async () => {
     console.error("❌ A critical error occurred in the reminder job:", error);
     status = { success: false, message: error.message };
   } finally {
-    // await mongoose.disconnect();
-    // console.log("🔌 Database disconnected.");
+    // We do NOT disconnect here, to prevent crashing the web server.
     console.log("✅ Cron job logic finished.");
   }
 

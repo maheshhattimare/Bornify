@@ -24,6 +24,7 @@ import {
 import { useAuth } from "../context/AuthContext.jsx";
 import { updateDob } from "../services/userService.js";
 import Loading from "../components/Loading.jsx";
+import { handleSuccess } from "../utils/toast.js";
 
 const Dashboard = () => {
   const { user, loadingUser, setUser } = useAuth();
@@ -105,6 +106,7 @@ const Dashboard = () => {
     setDeletingId(birthdayToDelete._id);
     try {
       await deleteBirthday(birthdayToDelete._id);
+      handleSuccess("🗑️ Birthday deleted successfully");
       fetchBirthdays();
     } catch (err) {
       alert(err.message || "Error deleting birthday");
@@ -441,10 +443,10 @@ const Dashboard = () => {
                               <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-1 truncate">
                                 {birthday.name}
                               </h3>
-                              <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400 mb-1">
+                              <div className="flex items-center space-x-1 text-sm text-gray-600 dark:text-gray-400 mb-1">
                                 <Calendar className="w-4 h-4" />
                                 <span>{formatDate(birthday.birthdate)}</span>
-                                <span>•</span>
+                                <span className="text-gray-800">•</span>
                                 <span className="capitalize">
                                   {birthday.relation}
                                 </span>
@@ -457,10 +459,10 @@ const Dashboard = () => {
                             </div>
                           </div>
 
-                          <div className="flex items-center space-x-3 ml-4">
+                          <div className="flex items-center space-x-2 ml-3">
                             <div className="text-center">
                               <div
-                                className={`px-3 py-1 rounded-full text-sm font-medium ${
+                                className={`px-2 py-1 rounded-full text-sm font-medium ${
                                   isToday
                                     ? "bg-yellow-400 text-yellow-900"
                                     : daysUntil <= 7

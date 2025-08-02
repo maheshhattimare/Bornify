@@ -43,7 +43,7 @@ app.get("/api/ping", (req, res) => {
 app.post("/api/cron/trigger", async (req, res) => {
   try {
     // Secure the endpoint with a secret key from environment variables
-    const cronSecret = req.headers['x-cron-secret'];
+    const cronSecret = req.headers["x-cron-secret"];
     if (cronSecret !== process.env.CRON_SECRET) {
       console.warn("⚠️ Unauthorized cron attempt detected.");
       return res.status(401).json({ message: "Unauthorized" });
@@ -52,19 +52,25 @@ app.post("/api/cron/trigger", async (req, res) => {
     // Run the job and wait for its result
     console.log("✅ Authorized cron request received.");
     const result = await runBirthdayReminders();
-    
+
     // Send a response based on the job's outcome
     if (result.success) {
-      res.status(200).json({ message: "Cron job executed successfully.", details: result });
+      res
+        .status(200)
+        .json({ message: "Cron job executed successfully.", details: result });
     } else {
-      res.status(500).json({ message: "Cron job failed during execution.", details: result });
+      res.status(500).json({
+        message: "Cron job failed during execution.",
+        details: result,
+      });
     }
   } catch (error) {
     console.error("❌ Fatal error in cron trigger endpoint:", error);
-    res.status(500).json({ message: "An unexpected error occurred on the server." });
+    res
+      .status(500)
+      .json({ message: "An unexpected error occurred on the server." });
   }
 });
-
 
 app.use("/api/users", authRoutes);
 app.use("/api/birthdays", birthdayRoutes);

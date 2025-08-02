@@ -11,6 +11,7 @@ import { AuthProvider } from "./context/AuthContext";
 import AppLayout from "./Layout/AppLayout";
 import Settings from "./pages/Settings";
 import LandingPage from "./pages/LandingPage";
+import { ToastContainer } from "react-toastify";
 
 const App = () => {
   return (
@@ -71,6 +72,7 @@ const App = () => {
           </Route>
         </Routes>
       </AuthProvider>
+      <ToastContainer position="top-right" autoClose={3000} />
     </GoogleOAuthProvider>
   );
 };

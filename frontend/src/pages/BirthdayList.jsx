@@ -21,6 +21,7 @@ import {
   deleteBirthday,
 } from "../services/birthdayService.js";
 import Loading from "../components/Loading.jsx";
+import { handleSuccess } from "../utils/toast.js";
 
 function BirthdayList() {
   const [birthdays, setBirthdays] = useState([]);
@@ -73,6 +74,7 @@ function BirthdayList() {
     setDeletingId(birthdayToDelete._id);
     try {
       await deleteBirthday(birthdayToDelete._id);
+      handleSuccess("🗑️ Birthday deleted successfully");
       fetchBirthdays();
     } catch (err) {
       console.error("Failed to delete birthday:", err.message);

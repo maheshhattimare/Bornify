@@ -68,7 +68,7 @@ const LandingPage = () => {
             <div className="mt-10 aspect-video max-w-3xl mx-auto rounded-xl overflow-hidden shadow-lg border border-gray-200 dark:border-gray-700">
               <iframe
                 className="w-full h-full"
-                src="https://www.youtube.com/embed/YOUR_VIDEO_ID"
+                src="https://www.youtube.com/embed/abXVIg8l8ZI?autoplay=1"
                 title="Bornify Demo"
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

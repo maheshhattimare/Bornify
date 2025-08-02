@@ -10,6 +10,8 @@ import {
   Gift,
   Camera,
 } from "lucide-react";
+import { ToastContainer } from "react-toastify";
+import { handleSuccess } from "../utils/toast";
 
 const BirthdayModal = ({ birthday, onSave, onClose }) => {
   const [formData, setFormData] = useState({
@@ -132,6 +134,7 @@ const BirthdayModal = ({ birthday, onSave, onClose }) => {
         }
 
         await onSave(formDataToSend);
+        handleSuccess("🎉 Birthday added succefully");
       } finally {
         setIsSubmitting(false);
       }

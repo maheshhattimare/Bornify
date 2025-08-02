@@ -93,7 +93,11 @@ const Header = () => {
                 title="Open Profile Menu"
               >
                 <span className="text-white text-sm font-medium">
-                  {user?.name.charAt(0).toUpperCase()}
+                  {loadingUser
+                    ? "loading"
+                    : user?.name
+                    ? user.name.charAt(0).toUpperCase()
+                    : "?"}
                 </span>
               </button>
 

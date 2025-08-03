@@ -10,8 +10,6 @@ import {
   Gift,
   Camera,
 } from "lucide-react";
-import { ToastContainer } from "react-toastify";
-import { handleSuccess } from "../utils/toast";
 
 const BirthdayModal = ({ birthday, onSave, onClose }) => {
   const [formData, setFormData] = useState({
@@ -62,11 +60,11 @@ const BirthdayModal = ({ birthday, onSave, onClose }) => {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // Validate file size (max 5MB)
-      if (file.size > 5 * 1024 * 1024) {
+      // Validate file size (max 10MB)
+      if (file.size > 10 * 1024 * 1024) {
         setErrors((prev) => ({
           ...prev,
-          avatar: "File size must be less than 5MB",
+          avatar: "File size must be less than 10MB",
         }));
         return;
       }
@@ -134,7 +132,6 @@ const BirthdayModal = ({ birthday, onSave, onClose }) => {
         }
 
         await onSave(formDataToSend);
-        handleSuccess("🎉 Birthday added succefully");
       } finally {
         setIsSubmitting(false);
       }
@@ -221,7 +218,7 @@ const BirthdayModal = ({ birthday, onSave, onClose }) => {
                   <span className="font-medium">Choose Photo</span>
                 </label>
                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                  PNG, JPG up to 5MB
+                  PNG, JPG up to 10MB
                 </p>
               </div>
             </div>

@@ -11,7 +11,7 @@ import birthdayRoutes from "./routes/birthdayRoutes.js";
 import { runBirthdayReminders } from "./jobs/cronJob.js"; // Import the function
 
 const PORT = process.env.PORT || 3000;
-const allowedOrigins = ["https://bornify.vercel.app"];
+const allowedOrigins = ["https://bornify.vercel.app", "http://localhost:5173"];
 
 const app = express();
 

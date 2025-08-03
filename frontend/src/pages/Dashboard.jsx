@@ -69,8 +69,10 @@ const Dashboard = () => {
     try {
       if (editingBirthday) {
         await updateBirthday(editingBirthday._id, formData);
+        handleSuccess("🎉 Birthday updated successfully");
       } else {
         await addBirthday(formData);
+        handleSuccess("🎉 Birthday added successfully");
       }
       fetchBirthdays();
     } catch (err) {

@@ -38,11 +38,26 @@ const Dashboard = () => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [birthdayToDelete, setBirthdayToDelete] = useState(null);
   const navigate = useNavigate();
+  const [isUserBirthday, setIsUserBirthday] = useState(false);
 
   // Fetch birthdays on mount
   useEffect(() => {
     fetchBirthdays();
   }, []);
+
+  // show banner when it is user birthday
+  useEffect(() => {
+    if (user?.dob) {
+      const today = new Date();
+      const dob = new Date(user.dob);
+
+      const isBirthday =
+        today.getMonth() === dob.getMonth() &&
+        today.getDate() === dob.getDate();
+
+      setIsUserBirthday(isBirthday);
+    }
+  }, [user]);
 
   // Show DOB modal if missing
   useEffect(() => {
@@ -299,6 +314,94 @@ const Dashboard = () => {
               </div>
             )}
           </div>
+
+          {/* user birthday section  */}
+          {isUserBirthday && (
+            <div className="relative mb-6 rounded-2xl p-6 bg-gradient-to-br from-purple-600/95 via-pink-500/90 to-yellow-400/90 shadow-2xl border border-white/30 backdrop-blur-lg overflow-hidden">
+              {/* Animated Background Sparkles */}
+              <div className="absolute inset-0 pointer-events-none">
+                {[...Array(6)].map((_, i) => (
+                  <div
+                    key={i}
+                    className="absolute animate-pulse"
+                    style={{
+                      left: `${20 + i * 12}%`,
+                      top: `${15 + (i % 2) * 25}%`,
+                      animationDelay: `${i * 0.3}s`,
+                      animationDuration: "2s",
+                    }}
+                  >
+                    <Sparkles className="w-4 h-4 text-white/60" />
+                  </div>
+                ))}
+              </div>
+
+              {/* Floating Particles */}
+              <div className="absolute inset-0 pointer-events-none">
+                {[...Array(8)].map((_, i) => (
+                  <div
+                    key={i}
+                    className="absolute w-2 h-2 bg-yellow-300 rounded-full animate-ping"
+                    style={{
+                      left: `${Math.random() * 100}%`,
+                      top: `${Math.random() * 100}%`,
+                      animationDelay: `${i * 0.2}s`,
+                      animationDuration: "1.5s",
+                    }}
+                  />
+                ))}
+              </div>
+
+              {/* Main Birthday Icon with Bounce */}
+              <div className="absolute -top-3 -left-3 w-14 h-14 bg-gradient-to-br from-yellow-300 to-orange-400 rounded-full flex items-center justify-center shadow-xl border-4 border-white/50 animate-bounce">
+                <Cake className="w-8 h-8 text-white drop-shadow-lg" />
+              </div>
+
+              {/* Secondary Icons */}
+              <div className="absolute -top-2 -right-2 w-10 h-10 bg-gradient-to-br from-pink-400 to-red-400 rounded-full flex items-center justify-center shadow-lg animate-pulse">
+                <Gift className="w-5 h-5 text-white" />
+              </div>
+
+              {/* Content with Enhanced Styling */}
+              <div className="ml-14 relative z-10">
+                <div className="flex items-center gap-2 mb-2">
+                  <h2 className="text-2xl md:text-3xl font-bold text-white drop-shadow-lg animate-pulse">
+                    🎉 Happy Birthday, {user.name.split(" ")[0]}!
+                  </h2>
+                  <Heart
+                    className="w-6 h-6 text-red-300 animate-bounce"
+                    style={{ animationDelay: "0.5s" }}
+                  />
+                </div>
+
+                <p className="text-base md:text-lg text-white/95 leading-relaxed font-medium">
+                  Wishing you a spectacular day filled with joy, success,
+                  amazing surprises, and unforgettable celebrations! May this
+                  new year bring you everything your heart desires! 🥳✨🎂
+                </p>
+
+                {/* Celebration Message */}
+                <div className="mt-4 flex items-center gap-2 text-sm md:text-base text-yellow-100 font-semibold">
+                  <Sparkles
+                    className="w-4 h-4 animate-spin"
+                    style={{ animationDuration: "3s" }}
+                  />
+                  <span>Hope your special day is absolutely wonderful!</span>
+                  <Sparkles
+                    className="w-4 h-4 animate-spin"
+                    style={{ animationDuration: "3s", animationDelay: "1s" }}
+                  />
+                </div>
+              </div>
+
+              {/* Enhanced Decorative Elements */}
+              <div className="absolute inset-0 rounded-2xl border-2 border-white/20 shadow-inner pointer-events-none"></div>
+              <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-black/10 to-transparent pointer-events-none"></div>
+
+              {/* Bottom Glow Effect */}
+              <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-4/5 h-4 bg-gradient-to-r from-transparent via-white/30 to-transparent rounded-full blur-sm"></div>
+            </div>
+          )}
 
           {/* Stats Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
